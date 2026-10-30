@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "zero-inbox": {
+      "command": "python",
+      "args": [
+        "c:/Users/swapn/OneDrive/Desktop/agent/zero-inbox/backend/run_mcp_stdio.py"
+      ],
+      "env": {
+        "PYTHONUNBUFFERED": "1",
+        "ZERO_INBOX_ENV": "development"
+      }
+    }
+  }
+}

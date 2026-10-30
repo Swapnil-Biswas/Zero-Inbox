@@ -1,0 +1,15 @@
+{
+  "title": "ZERO-INBOX — Autonomous Media Intelligence & Daily Digest",
+  "description": "An autonomous personal media intelligence agent that continuously aggregates RSS, Atom, newsletter, Reddit, and web content, eliminates sponsorships and noise, clusters related developments, and synthesizes a high-signal executive daily brief.",
+  "endpoint": "https://zero-inbox.antigravity.run/jobs",
+  "output": {
+    "quantity": 1,
+    "unit": "Personalized Daily Intelligence Brief",
+    "summary": "Synthesized executive intelligence brief featuring Top Stories, Technology Radar, Community Pulse, and Today's Takeaway with verified source citations.",
+    "deliveryEstimate": "45 seconds"
+  },
+  "source": {
+    "repository": "https://github.com/Swapnil-Biswas/Zero-Inbox",
+    "commit": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678"
+  }
+}

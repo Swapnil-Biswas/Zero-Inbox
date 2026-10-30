@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.backend
+    ports:
+      - "8010:8010"
+    environment:
+      - ZERO_INBOX_HOST=0.0.0.0
+      - ZERO_INBOX_PORT=8010
+      - ZERO_INBOX_ENV=production
+    volumes:
+      - zero_inbox_data:/app/data
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  zero_inbox_data:
