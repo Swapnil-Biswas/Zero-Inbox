@@ -3,9 +3,12 @@ ZERO-INBOX: FastAPI Main Application
 Mounts REST APIs, Autonomous Scheduler, HireCrew Seller Adapter & MCP SSE Transport
 """
 
+import secrets
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
+from starlette.responses import JSONResponse
 
 from app.core.config import settings
 from app.db.database import db
@@ -23,7 +26,9 @@ async def lifespan(app: FastAPI):
     # Startup: initialize database and start autonomous scheduler
     db.init_db()
     scheduler_engine.start()
-    yield
+    # Mounted sub-apps get no lifespan of their own, so run the MCP session manager here.
+    async with mcp_server.session_manager.run():
+        yield
     # Shutdown: gracefully shut down scheduler
     scheduler_engine.stop()
 
@@ -39,7 +44,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -53,13 +58,18 @@ app.include_router(analytics_router)
 # Mount HireCrew Seller API
 app.include_router(hirecrew_router)
 
-# Mount MCP Streamable HTTP / SSE Endpoint
-# MCP client connects to http://<host>:<port>/mcp
-try:
-    app.mount("/mcp", mcp_server.sse_app())
-except Exception:
-    # If sse_app is mounted differently or streamable_http_app
-    pass
+# MCP Streamable HTTP endpoint (POST /mcp). Its tools can change sources and send
+# notifications, so set ZERO_INBOX_MCP_AUTH_TOKEN before exposing it beyond localhost.
+mcp_http_app = mcp_server.streamable_http_app(streamable_http_path="/mcp", stateless_http=True, json_response=True)
+
+
+@app.middleware("http")
+async def require_mcp_token(request, call_next):
+    if request.url.path.startswith("/mcp") and settings.mcp_auth_token:
+        supplied = request.headers.get("authorization", "")
+        if not secrets.compare_digest(supplied, f"Bearer {settings.mcp_auth_token}"):
+            return JSONResponse({"detail": "Invalid or missing MCP bearer token."}, status_code=401)
+    return await call_next(request)
 
 
 @app.get("/health", tags=["Health"])
@@ -80,3 +90,7 @@ async def root():
         "mcp_endpoint": "/mcp",
         "hirecrew_seller_jobs": "/jobs"
     }
+
+
+# Must stay the last route registered: serves POST /mcp without a redirect.
+app.mount("/", mcp_http_app)

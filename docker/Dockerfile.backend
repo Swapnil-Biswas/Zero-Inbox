@@ -18,3 +18,4 @@ COPY backend/ .
 EXPOSE 8010
 
 CMD ["python", "run_server.py"]
+

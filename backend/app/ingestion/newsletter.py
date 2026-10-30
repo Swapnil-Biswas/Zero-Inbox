@@ -129,3 +129,4 @@ class NewsletterConnector(SourceConnector):
             "privacy_mode": "Strict Bulk Filter Active",
             "personal_email_suppression": True
         }
+

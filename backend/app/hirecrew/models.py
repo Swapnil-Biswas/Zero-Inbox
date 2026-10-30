@@ -19,19 +19,16 @@ class HireCrewJobSubmitResponse(BaseModel):
 
 
 class HireCrewResearchSource(BaseModel):
+    """HireCrew validates sources strictly: exactly {title, url}."""
     title: str
     url: str
-    snippet: Optional[str] = None
-
-
-class HireCrewResearchResult(BaseModel):
-    report: str
-    sources: List[HireCrewResearchSource] = Field(default_factory=list)
 
 
 class HireCrewJobPollResponse(BaseModel):
+    """seller-hosted-api-v1: report and sources are top-level fields of a delivered job."""
     jobId: str
     orderId: str
     status: str  # queued | running | delivered | failed
-    result: Optional[HireCrewResearchResult] = None
+    report: Optional[str] = None
+    sources: Optional[List[HireCrewResearchSource]] = None
     error: Optional[str] = None

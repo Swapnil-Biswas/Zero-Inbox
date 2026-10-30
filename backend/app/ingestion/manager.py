@@ -60,3 +60,4 @@ class IngestionManager:
 
 
 ingestion_manager = IngestionManager()
+

@@ -37,3 +37,4 @@ async def get_digest_history(
     limit: int = Query(15, ge=1, le=100)
 ):
     return db.get_digest_history(user_id=user_id, limit=limit)
+

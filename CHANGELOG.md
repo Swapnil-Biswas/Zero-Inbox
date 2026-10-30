@@ -40,3 +40,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Frontend Dashboard**:
   - React 19, TypeScript, and Tailwind CSS web dashboard.
   - Views for Intelligence Radar, Source Manager, Topic Preferences, Delivery Settings, History Archive, and MCP / HireCrew settings.
+

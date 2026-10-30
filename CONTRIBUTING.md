@@ -45,3 +45,4 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/) stand
 - `docs:` for documentation updates
 - `test:` for test additions or modifications
 - `chore:` for build process or auxiliary tool changes
+

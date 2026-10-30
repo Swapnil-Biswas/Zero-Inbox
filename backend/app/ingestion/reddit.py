@@ -112,3 +112,4 @@ class RedditConnector(SourceConnector):
             "min_score_filter": self.min_score,
             "min_comments_filter": self.min_comments
         }
+

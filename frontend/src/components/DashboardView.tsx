@@ -152,3 +152,4 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ overview, latestDi
     </div>
   );
 };
+

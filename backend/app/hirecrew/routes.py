@@ -10,7 +10,7 @@ from app.core.config import settings
 from app.hirecrew.models import (
     HireCrewJobSubmitRequest, HireCrewJobSubmitResponse, HireCrewJobPollResponse
 )
-from app.hirecrew.worker import create_or_reuse_hirecrew_job, JOB_CACHE
+from app.hirecrew.worker import create_or_reuse_hirecrew_job, get_job as load_job
 
 
 router = APIRouter(tags=["HireCrew Seller API"])
@@ -18,9 +18,6 @@ router = APIRouter(tags=["HireCrew Seller API"])
 
 def verify_hirecrew_auth(authorization: Optional[str] = Header(None)):
     """Enforces constant-time Bearer token authentication."""
-    if not settings.hirecrew_seller_token:
-        return True  # Dev mode permissive if unset
-
     if not authorization:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -54,14 +51,16 @@ async def submit_job(
     idempotency_key: Optional[str] = Header(None, alias="Idempotency-Key")
 ):
     verify_hirecrew_auth(authorization)
+    if not idempotency_key or not idempotency_key.strip():
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Missing required Idempotency-Key header.")
 
     try:
-        job_id, job_status, is_reused = create_or_reuse_hirecrew_job(request, idempotency_key)
+        job_id, job_status, is_reused = create_or_reuse_hirecrew_job(request, idempotency_key.strip())
         return HireCrewJobSubmitResponse(jobId=job_id, status=job_status)
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e))
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Job could not be created.")
 
 
 @router.get(
@@ -79,14 +78,16 @@ async def get_job(
     if not re.match(r"^[a-zA-Z0-9_\-]+$", job_id):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid job ID format.")
 
-    record = JOB_CACHE.get(job_id)
+    record = load_job(job_id)
     if not record:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Job {job_id} not found.")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Job not found.")
 
     return HireCrewJobPollResponse(
-        jobId=record["jobId"],
-        orderId=record["orderId"],
+        jobId=record["job_id"],
+        orderId=record["order_id"],
         status=record["status"],
-        result=record.get("result"),
+        report=record.get("report"),
+        sources=record.get("sources"),
         error=record.get("error")
     )
+

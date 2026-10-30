@@ -11,7 +11,7 @@ This document contains the official listing metadata, pricing schedules, and ope
 - **Suggested Price**: $1.50 USD per generated brief
 - **Supported Payment Currencies**: USDC, USD
 - **Delivery Estimate**: 45 seconds
-- **Seller Endpoint**: `https://zero-inbox.antigravity.run/jobs`
+- **Seller Endpoint**: `https://swapnil-laptop.tail3f270b.ts.net/zero-inbox/jobs` (self-hosted via Tailscale Funnel)
 
 ---
 
@@ -35,3 +35,4 @@ This document contains the official listing metadata, pricing schedules, and ope
 - Multi-channel Delivery: Telegram Bot, Discord Webhook, Meta WhatsApp Business Cloud API.
 - Autonomous Scheduling: Timezone-aware cron (Default 6:00 AM) with atomic database locks.
 - Real-time Cost Accounting: Live token and dollar tracking across Gemini, OpenAI, Anthropic, and Local models.
+

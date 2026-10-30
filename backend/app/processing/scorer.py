@@ -77,3 +77,4 @@ class RelevanceScorer:
 
 
 relevance_scorer = RelevanceScorer()
+

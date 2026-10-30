@@ -17,3 +17,4 @@ def get_llm_provider(name: Optional[str] = None) -> LLMProvider:
 
     # Defaults to LocalLLMProvider (which handles OpenAI-compatible endpoints or local extraction)
     return LocalLLMProvider()
+

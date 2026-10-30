@@ -29,3 +29,4 @@ class SourceConnector(ABC):
     def get_source_metadata(self, source: SourceConfig) -> Dict[str, Any]:
         """Returns protocol-specific operational metadata."""
         pass
+

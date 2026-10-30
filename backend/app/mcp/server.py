@@ -402,3 +402,4 @@ def personalized_media_summary() -> str:
         "Review the user's configured topic preferences and generate an aligned media summary. "
         "Prioritize user priority sources, respect exclude keywords, and highlight actionable insights."
     )
+

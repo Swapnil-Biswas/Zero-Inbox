@@ -26,3 +26,4 @@ async def save_preferences(prefs: UserPreferences):
     # Reschedule user's autonomous cron job
     scheduler_engine.schedule_user_job(prefs.user_id)
     return prefs
+

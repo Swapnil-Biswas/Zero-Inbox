@@ -27,3 +27,4 @@ class NotificationProvider(ABC):
     async def send_test_message(self, destination: str) -> Tuple[bool, Optional[str]]:
         """Sends a verification ping."""
         pass
+

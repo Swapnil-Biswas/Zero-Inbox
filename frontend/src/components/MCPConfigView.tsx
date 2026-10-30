@@ -101,3 +101,4 @@ export const MCPConfigView: React.FC = () => {
     </div>
   );
 };
+

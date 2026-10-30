@@ -116,3 +116,4 @@ class RssConnector(SourceConnector):
             "cached_etag": source.etag,
             "cached_last_modified": source.last_modified
         }
+

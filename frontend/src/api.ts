@@ -66,3 +66,4 @@ export async function fetchDigestHistory(): Promise<Digest[]> {
   if (!res.ok) throw new Error('Failed to fetch digest history');
   return res.json();
 }
+

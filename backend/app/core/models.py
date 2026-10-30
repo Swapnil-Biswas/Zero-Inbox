@@ -152,3 +152,4 @@ class DeliveryLog(BaseModel):
     status: str  # success | failed | skipped
     error_message: Optional[str] = None
     sent_at: datetime = Field(default_factory=datetime.utcnow)
+

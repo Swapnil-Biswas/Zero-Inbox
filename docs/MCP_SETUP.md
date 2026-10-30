@@ -74,3 +74,4 @@ Remote MCP clients can connect over Server-Sent Events (SSE) to query tools and 
 - `research_digest`: Synthesizes scientific papers and breakthrough experiments.
 - `startup_intelligence`: Focuses on funding, venture shifts, and founder announcements.
 - `personalized_media_summary`: Interacts with the user to craft custom media summaries.
+

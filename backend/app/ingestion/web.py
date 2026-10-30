@@ -95,3 +95,4 @@ class WebArticleConnector(SourceConnector):
             "connector": "WebArticleConnector",
             "url": source.url
         }
+

@@ -85,3 +85,4 @@ class WhatsAppProvider(NotificationProvider):
                 return False, f"WhatsApp status {resp.status_code}: {resp.text}"
             except Exception as e:
                 return False, str(e)
+

@@ -192,3 +192,4 @@ export const SourceManagerView: React.FC<SourceManagerViewProps> = ({ sources, o
     </div>
   );
 };
+

@@ -83,3 +83,4 @@ class TelegramProvider(NotificationProvider):
                 return False, f"Telegram status {resp.status_code}: {resp.text}"
             except Exception as e:
                 return False, str(e)
+

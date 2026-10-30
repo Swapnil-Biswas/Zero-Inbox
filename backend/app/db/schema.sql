@@ -110,3 +110,4 @@ CREATE TABLE IF NOT EXISTS scheduler_locks (
     acquired_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     expires_at TIMESTAMP NOT NULL
 );
+

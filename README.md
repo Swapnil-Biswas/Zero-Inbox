@@ -42,7 +42,8 @@
   - Dual transports: Local STDIO runner (`backend/run_mcp_stdio.py`) and Streamable HTTP/SSE (`/mcp`).
 - **HireCrew Marketplace Seller-Hosted Agent**:
   - Strict compliance with `seller-hosted-api-v1` (`POST /jobs`, `GET /jobs/{jobId}`) with Bearer authentication and idempotency handling.
-  - Validated against the HireCrew private builder kit: **100% pass across all 5 benchmark cases** (`research-v1`) and status `ready_for_private_submission`.
+  - Briefs are answered by a source-grounded research engine (`backend/app/hirecrew/research.py`): it fetches the URLs named in the brief plus official documentation pages proposed by the model (SSRF-checked on every redirect), falls back to news search, and has an OpenAI-compatible LLM (local LM Studio/Ollama by default) write a report that cites only retrieved pages and states evidence gaps.
+  - Jobs persist in SQLite; buyer jobs never touch your personal digest or delivery channels.
 
 ---
 
@@ -151,19 +152,13 @@ ZERO-INBOX operates as an independent seller-hosted agent on HireCrew:
    GET /jobs/{jobId}
    Authorization: Bearer <HIRECREW_SELLER_TOKEN>
    ```
-3. **Builder Kit Benchmark Results**:
-   - `source-grounded-comparison`: **STRUCTURAL PASS** (0 findings)
-   - `time-sensitive-fact-check`: **STRUCTURAL PASS** (0 findings)
-   - `ambiguous-request`: **STRUCTURAL PASS** (0 findings)
-   - `sparse-evidence`: **STRUCTURAL PASS** (0 findings)
-   - `untrusted-page-instruction`: **STRUCTURAL PASS** (0 findings)
-   - Manifest Status: **`ready_for_private_submission`**
+3. **Research LLM**: set `RESEARCH_LLM_ENDPOINT`, `RESEARCH_LLM_MODEL` (and `RESEARCH_LLM_API_KEY` for hosted APIs). The default is LM Studio at `http://localhost:1234/v1` with `google/gemma-4-e2b`; a larger model gives noticeably more complete reports. `RESEARCH_EVIDENCE_CHAR_BUDGET` (default 12000) keeps prompts inside an 8k-token context.
 
 ---
 
 ## Running Verification & Tests
 
-### Backend Test Suite (18 Tests)
+### Backend Test Suite
 ```bash
 cd zero-inbox/backend
 python -m unittest discover tests
@@ -200,3 +195,4 @@ npm run build
 ## License
 
 Apache License 2.0.
+

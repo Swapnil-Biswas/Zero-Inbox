@@ -83,3 +83,4 @@ class LocalLLMProvider(LLMProvider):
         p_tok = cost_tracker.estimate_tokens(joined)
         c_tok = cost_tracker.estimate_tokens(takeaway)
         return takeaway, p_tok, c_tok
+

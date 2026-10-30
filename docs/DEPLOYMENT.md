@@ -38,3 +38,4 @@ docker-compose up -d --build
 ## 3. Persistent Storage
 
 ZERO-INBOX uses an SQLite WAL database for job idempotency, article deduplication, and user preferences. Ensure the data directory (`data/`) is mounted on a persistent storage volume when deploying in containerized environments.
+

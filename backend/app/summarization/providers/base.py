@@ -39,3 +39,4 @@ class LLMProvider(ABC):
         Returns: (takeaway_text, prompt_tokens, completion_tokens)
         """
         pass
+

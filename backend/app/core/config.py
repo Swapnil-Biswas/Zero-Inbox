@@ -3,6 +3,7 @@ ZERO-INBOX: Core Configuration Module
 """
 
 import os
+import secrets
 from typing import List, Optional, Dict
 from pydantic import BaseModel, Field
 
@@ -66,8 +67,18 @@ class Settings(BaseModel):
     mcp_auth_token: Optional[str] = os.getenv("ZERO_INBOX_MCP_AUTH_TOKEN")
 
     # HireCrew Marketplace
-    hirecrew_seller_token: str = os.getenv("HIRECREW_SELLER_TOKEN", "sk-live-zeroinbox-hirecrew-seller-token")
-    hirecrew_job_timeout_seconds: int = 180
+    # No published fallback: when unset, a random per-process token keeps /jobs closed.
+    hirecrew_seller_token: str = os.getenv("HIRECREW_SELLER_TOKEN") or secrets.token_urlsafe(32)
+    hirecrew_job_timeout_seconds: int = 300
+
+    # Research LLM for HireCrew briefs (any OpenAI-compatible chat endpoint, e.g. LM Studio / Ollama / OpenAI)
+    research_llm_endpoint: str = os.getenv("RESEARCH_LLM_ENDPOINT", "http://localhost:1234/v1")
+    research_llm_model: str = os.getenv("RESEARCH_LLM_MODEL", "google/gemma-4-e2b")
+    research_llm_api_key: Optional[str] = os.getenv("RESEARCH_LLM_API_KEY")
+    research_llm_timeout_seconds: float = float(os.getenv("RESEARCH_LLM_TIMEOUT_SECONDS", "180"))
+    # Evidence characters sent to the model; ~12k chars fits an 8k-token context with room to answer.
+    research_evidence_char_budget: int = int(os.getenv("RESEARCH_EVIDENCE_CHAR_BUDGET", "12000"))
 
 
 settings = Settings()
+

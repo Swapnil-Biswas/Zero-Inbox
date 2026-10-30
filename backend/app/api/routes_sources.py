@@ -58,3 +58,4 @@ async def test_source_fetch(
         "articles_found": len(articles),
         "sample_titles": [a.title for a in articles[:3]]
     }
+

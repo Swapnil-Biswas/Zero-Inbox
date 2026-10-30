@@ -44,3 +44,4 @@ Every execution logs prompt tokens, completion tokens, model names, and total US
 - REST API: `GET /api/v1/analytics/costs`
 - MCP Tool: `get_agent_status`
 - Web Dashboard: Cost Analytics Card
+

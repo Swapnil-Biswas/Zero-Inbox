@@ -30,3 +30,4 @@ async def get_overview(user_id: str = Query("default_user")):
         "latest_digest_date": latest_digest.date_str if latest_digest else None,
         "next_scheduled_execution": sched.get("next_run_time") if sched else None
     }
+

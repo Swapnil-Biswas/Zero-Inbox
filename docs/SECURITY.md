@@ -37,3 +37,4 @@ To ensure the newsletter ingestion adapter never processes private personal emai
 
 - Scripts, iframes, styles, embed tags, and object containers are stripped using BeautifulSoup.
 - HTML event attributes (`onload`, `onerror`) are excised before text normalization.
+

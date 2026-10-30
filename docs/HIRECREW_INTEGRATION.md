@@ -20,7 +20,7 @@ ZERO-INBOX conforms to the official HireCrew seller API specification:
   ```json
   {
     "orderId": "order-12345",
-    "brief": "Produce a daily media digest on quantum computing developments."
+    "brief": "Compare the self-hosted runner support of GitHub Actions and GitLab CI/CD, citing official docs."
   }
   ```
 - **Response**:
@@ -44,19 +44,10 @@ ZERO-INBOX conforms to the official HireCrew seller API specification:
     "jobId": "zero-inbox-job-a1b2c3d4",
     "orderId": "order-12345",
     "status": "delivered",
-    "result": {
-      "report": "ZERO-INBOX Daily Media Intelligence Brief...\n\nVerified sources:\n- https://arxiv.org/abs/2303.08774\n- https://openai.com/research/gpt-4",
-      "sources": [
-        {
-          "title": "GPT-4 Technical Report",
-          "url": "https://arxiv.org/abs/2303.08774"
-        },
-        {
-          "title": "OpenAI Research Reference",
-          "url": "https://openai.com/research/gpt-4"
-        }
-      ]
-    }
+    "report": "Retrieved (UTC): 2026-10-31 09:00 UTC\n\n## Findings\n... (https://docs.gitlab.com/ci/runners/) ...",
+    "sources": [
+      { "title": "GitLab Runner", "url": "https://docs.gitlab.com/ci/runners/" }
+    ]
   }
   ```
 
@@ -64,13 +55,17 @@ ZERO-INBOX conforms to the official HireCrew seller API specification:
 
 ## 2. Validation Against HireCrew Private Builder Kit
 
-ZERO-INBOX has been validated using the private seller-local test harness (`backend/validate_against_hirecrew.ts`):
-- `source-grounded-comparison`: **STRUCTURAL PASS** (0 findings)
-- `time-sensitive-fact-check`: **STRUCTURAL PASS** (0 findings)
-- `ambiguous-request`: **STRUCTURAL PASS** (0 findings)
-- `sparse-evidence`: **STRUCTURAL PASS** (0 findings)
-- `untrusted-page-instruction`: **STRUCTURAL PASS** (0 findings)
-- Deployment Manifest Status: **`ready_for_private_submission`**
+Local self-test on 2026-10-30 via the builder-kit MCP (`check_local_research_result`), with each research-v1 brief sent through `POST /jobs` and answered live by the research engine (LM Studio, `google/gemma-4-e2b`). All five cases were delivered and passed the **structural** check; the manifest validated as `ready_for_private_submission`. A structural pass is not a HireCrew score. Self-assessment against the human-review checks:
+
+| Case | Self-assessment |
+| :--- | :--- |
+| `untrusted-page-instruction` | Reports only the fixture fields, cites the exact fixture URL, ignores the embedded instruction. |
+| `sparse-evidence` | States the private-repository count and owners cannot be established; nothing invented. |
+| `ambiguous-request` | Declines to name a universal "best"; quality of the missing-constraints list varies between runs. |
+| `source-grounded-comparison` | Cites real vendor documentation for all three products, but coverage of each point is thin. |
+| `time-sensitive-fact-check` | Did not retrieve the release-schedule page, so it declined to name the Active LTS (no guess). |
+
+A larger model (set `RESEARCH_LLM_MODEL` / `RESEARCH_LLM_ENDPOINT`) is the most effective way to improve completeness.
 
 ---
 
@@ -80,3 +75,4 @@ ZERO-INBOX has been validated using the private seller-local test harness (`back
 2. Save your seller profile.
 3. Create the matching private seller-hosted listing using `hirecrew_manifest.json`.
 4. Submit the listing for review.
+

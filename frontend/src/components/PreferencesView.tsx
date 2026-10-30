@@ -184,3 +184,4 @@ export const PreferencesView: React.FC<PreferencesViewProps> = ({ preferences, o
     </form>
   );
 };
+

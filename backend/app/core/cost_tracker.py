@@ -58,3 +58,4 @@ class CostTracker:
 
 
 cost_tracker = CostTracker()
+

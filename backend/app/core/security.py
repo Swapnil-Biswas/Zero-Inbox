@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup
 BLOCKED_NETWORKS = [
     ipaddress.ip_network("0.0.0.0/8"),
     ipaddress.ip_network("10.0.0.0/8"),
+    ipaddress.ip_network("100.64.0.0/10"),   # CGNAT, incl. Tailscale tailnet addresses
     ipaddress.ip_network("127.0.0.0/8"),
     ipaddress.ip_network("169.254.0.0/16"),   # AWS/GCP cloud metadata & link-local
     ipaddress.ip_network("172.16.0.0/12"),
@@ -45,8 +46,8 @@ def validate_url_safe(url: str) -> Tuple[bool, str]:
         if not hostname:
             return False, "Missing hostname in URL."
 
-        hostname_lower = hostname.lower()
-        if hostname_lower in DANGEROUS_HOSTS:
+        hostname_lower = hostname.lower().rstrip(".")
+        if hostname_lower in DANGEROUS_HOSTS or hostname_lower.endswith((".local", ".internal", ".ts.net", ".localhost")):
             return False, f"Target host '{hostname}' is forbidden (SSRF protection)."
 
         # Resolve hostname to IP to verify against private subnets
@@ -54,7 +55,12 @@ def validate_url_safe(url: str) -> Tuple[bool, str]:
             addr_info = socket.getaddrinfo(hostname, None)
             for item in addr_info:
                 ip_str = item[4][0]
-                ip_obj = ipaddress.ip_address(ip_str)
+                ip_obj = ipaddress.ip_address(ip_str.split("%")[0])
+                # Unwrap IPv4-mapped IPv6 (::ffff:10.0.0.1) so it is checked as IPv4
+                if getattr(ip_obj, "ipv4_mapped", None):
+                    ip_obj = ip_obj.ipv4_mapped
+                if not ip_obj.is_global:
+                    return False, f"Target host resolves to non-public address: {ip_str}"
                 for net in BLOCKED_NETWORKS:
                     if ip_obj in net:
                         return False, f"Target host resolves to blocked internal network: {ip_str}"
@@ -102,3 +108,4 @@ def sanitize_user_input(text: str, max_len: int = 500) -> str:
     # Strip dangerous characters
     cleaned = re.sub(r"[<>\"\'`;]", "", text)
     return cleaned.strip()[:max_len]
+

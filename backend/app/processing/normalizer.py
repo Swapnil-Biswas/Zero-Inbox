@@ -65,3 +65,4 @@ def normalize_article(raw: RawArticle) -> ProcessedArticle:
         novelty_score=1.0,
         is_duplicate=False
     )
+
