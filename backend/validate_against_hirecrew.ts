@@ -138,7 +138,7 @@ const manifestInput = {
   },
   source: {
     repository: "https://github.com/Swapnil-Biswas/Zero-Inbox",
-    commit: "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678"
+    commit: "f39356c2c4b8a308fee5acc596c5fe93adcccd6f"
   }
 };
 
