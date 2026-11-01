@@ -14,7 +14,6 @@
 **ZERO-INBOX** eliminates the need to manually consume dozens of newsletters, RSS feeds, subreddits, and web publications. The agent operates autonomously every morning (default: 6:00 AM) to collect new content, strip noise and sponsorships, detect duplicate reporting, score developments according to your custom preferences, and synthesize a concise, high-signal intelligence brief delivered to **Telegram**, **Discord**, or **WhatsApp**.
 
 ---
-
 ## Key Capabilities
 
 - **Modular Multi-Source Ingestion**:
